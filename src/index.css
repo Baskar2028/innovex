@@ -1,0 +1,32 @@
+@config "../tailwind.config.js";
+@import "tailwindcss";
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 96px;
+  }
+
+  body {
+    @apply bg-bg text-slate-50 font-sans overflow-x-hidden antialiased;
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  /* Reusable Gradient Underlines */
+  .underline-gradient {
+    @apply w-[60px] h-[3px] mx-auto mt-3 rounded-full bg-gradient-to-r from-primary to-primary-2;
+  }
+  .underline-left {
+    @apply w-[60px] h-[3px] mt-4 mb-8 rounded-full bg-gradient-to-r from-primary to-primary-2;
+  }
+
+  /* IDE Background Effects */
+  .ide-bg-glow {
+    box-shadow: 0 0 80px rgba(0,0,0,0.8);
+  }
+  .ide-overlay {
+    background: radial-gradient(circle at center, rgba(3,7,18,0.4) 0%, rgba(3,7,18,0.95) 100%);
+  }
+}
