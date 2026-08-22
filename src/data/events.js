@@ -2,7 +2,7 @@ import pptImage from '../assets/ppt.avif';
 import projectExpoImage from '../assets/projectexpo.jpg';
 import quizImage from '../assets/quiz.jpg';
 import artnovaImage from '../assets/logo.webp';
-import hennaImage from '../assets/henna.jpg';
+import debugImage from "../assets/debug.jpg";
 
 export const eventsData = [
   {
@@ -24,7 +24,7 @@ export const eventsData = [
   },
   {
     id: "expo",
-    category: "Technical",
+    category: "Technical ",
     title: "02 — PROTOSPARK",
     image: projectExpoImage,
     time: "12:00 PM – 2:00 PM",
@@ -39,24 +39,42 @@ export const eventsData = [
     ]
   },
   {
-    id: "quiz",
-    category: "Technical",
-    title: "03 — QUIZMANIA",
-    image: quizImage,
-    time: "2:40 PM – 3:10 PM",
-    desc: "A competitive technical quiz testing programming and core CS knowledge.",
-    rules: [
-      "Individual participation only.",
-      "The competition consists of 2 rounds.",
-      "Questions cover C, C++, Python, Java, JavaScript, DSA and CS concepts.",
-      "No unfair means or external assistance is allowed.",
-      "The Top 2 participants will be selected as winners."
-    ]
-  },
+  id: "debug",
+  category: "Technical",
+  title: "03 — TRY CRACK ME",
+  image: debugImage,
+  time: "2:45 PM – 3:30 PM",
+  desc: "Identify and resolve hidden bugs in provided code snippets to make the program execute successfully.",
+  rules: [
+    "Individual participation only.",
+    "The event consists of 2 rounds. Top performers from Round 1 will be shortlisted for Round 2.",
+    "Buggy code snippets will be provided in 3 languages: C, Python, and Java. Participants can choose their preferred language.",
+    "Participants must bring their own laptops with the necessary IDEs or text editors installed.",
+    "Judging criteria: Winners are determined based on the accuracy of the bug fixes and the fastest time of completion.",
+    "The top 2 participants from the final round will be declared the winners.",
+    "Use of the internet, AI tools (like ChatGPT), or flash drives is strictly prohibited during the competition."
+  ]
+},
+  {
+  id: "quiz",
+  category: "Non-Technical",
+  title: "04 — QUIZMANIA",
+  image: quizImage,
+  time: "2:40 PM – 3:10 PM",
+  desc: "A fast-paced trivia competition testing your general awareness, logic, and basic technical knowledge.",
+  rules: [
+    "Individual participation only.",
+    "The competition consists of 2 rounds (a preliminary round and a final round).",
+    "Questions will cover a variety of topics including Logo Identification, Logical Reasoning, Jumbled Words, Sports, General Knowledge (GK), and basic Technical trivia.",
+    "There is no negative marking for incorrect answers.",
+    "Use of mobile phones, smartwatches, or any external assistance is strictly prohibited.",
+    "The participant with the highest score at the end of Round 2 will be declared as a winner."
+  ]
+},
   {
     id: "logo",
     category: "Non-Technical",
-    title: "04 — ARTNOVA",
+    title: "05 — ARTNOVA",
     image: artnovaImage,
     time: "2:50 PM – 3:30 PM",
     desc: "A creative design challenge to create a logo based on an on-the-spot topic.",
@@ -69,19 +87,5 @@ export const eventsData = [
       "Plagiarism or previously created designs are not allowed."
     ]
   },
-  {
-    id: "mehandi",
-    category: "Non-Technical",
-    title: "05 — HENNA FIEST",
-    image: hennaImage,
-    time: "2:50 PM – 3:30 PM",
-    desc: "A creative Mehendi design competition focused on artistic skill.",
-    rules: [
-      "Individual participation only.",
-      "Female participants only.",
-      "Participants must bring their own Mehendi materials.",
-      "Maximum time: 30 minutes.",
-      "Designs will be judged based on creativity, neatness, and originality."
-    ]
-  }
+  
 ];

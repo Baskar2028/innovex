@@ -1,5 +1,7 @@
 import Reveal from './Reveal';
 import innovexLogo from '../assets/innovex-logo.png';
+import hodImage from '../assets/hod.jpeg';
+import staffImage from '../assets/staff.jpeg';
 import presidentImage from '../assets/president.jpeg';
 import vicePresidentImage from '../assets/founder.jpeg';
 
@@ -36,7 +38,8 @@ export default function Community() {
             {/* HOD */}
             <div className="flex justify-start w-full">
               <Card 
-                image={innovexLogo} 
+                image={hodImage} 
+                imageClassName="object-[center_25%]"
                 name="Mr.C. Prakash Narayanan.,M.E.,HOD" 
                 role="Head of Department" 
                 desc="Provides academic guidance and oversees the symposium’s overall direction." 
@@ -48,7 +51,8 @@ export default function Community() {
             {/* Staff Coordinator */}
             <div className="flex justify-start w-full">
               <Card 
-                image={innovexLogo} 
+                image={staffImage}
+                imageClassName="object-[center_25%]"
                 name="Mrs. K.Nandini"
                 role="Staff Coordinator" 
                 desc="Coordinates the event team, schedules, and smooth on-ground execution." 

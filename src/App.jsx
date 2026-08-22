@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -9,8 +10,9 @@ import Modal from './components/Modal';
 import RegisterModal from './components/RegisterModal';
 // import Reveal from './components/Reveal';
 import { eventsData } from './data/events';
+import AdminPage from './AdminPage';
 
-export default function App() {
+function MainSite() {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
@@ -39,5 +41,19 @@ export default function App() {
       )}
       {isRegisterOpen && <RegisterModal onClose={() => setIsRegisterOpen(false)} />}
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        {/* Main public website */}
+        <Route path="/" element={<MainSite />} />
+
+        {/* Hidden Developer Portal */}
+        <Route path="/developer-admin-portal" element={<AdminPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }

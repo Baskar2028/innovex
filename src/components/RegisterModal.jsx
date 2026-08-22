@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
+import payImage from '../assets/pay.jpeg';
 
-const degrees = ['BE', 'BTech', 'B.Sc', 'M.Sc', 'B.com', 'Others'];
-const branches = ['CSE', 'IT', 'AIDS', 'AIML', 'DS', 'CSE(CS)', 'ECE', 'EEE', 'CIVIL', 'MECH', 'ARTS AND SCIENCE'];
+const degrees = ['BE', 'BTech'];
+const branches = ['CSE', 'IT', 'AIDS', 'AIML', 'DS', 'CSE(CS)', 'ECE', 'EEE', 'CIVIL', 'MECH'];
 const years = ['I', 'II', 'III', 'IV'];
-const events = ['PREZI', 'PROTOSPARK', 'QUIZMANIA', 'ARTNOVA', 'HENNA FIEST'];
+const events = ['PREZI', 'PROTOSPARK', 'TRY CRACK ME','QUIZMANIA', 'ARTNOVA'];
 
 export default function RegisterModal({ onClose }) {
   const [form, setForm] = useState({ name: '', degree: '', degreeDetail: '', branch: '', year: '', teamMembers: '', events: [], payment: '' });
@@ -148,7 +149,7 @@ export default function RegisterModal({ onClose }) {
 
           {form.payment === 'Online' && <div className="rounded-xl border border-dashed border-primary/50 bg-primary/5 p-5 text-center">
             <p className="mb-3 text-sm text-slate-200">Scan to pay</p>
-            <img src="/qr.png" alt="qr" className="mx-auto h-44 w-44 rounded-lg bg-white object-contain" />
+            <img src={payImage} alt="qr" className="mx-auto h-44 w-44 rounded-lg bg-white object-contain" />
           </div>}
 
           {error && <p className="rounded-lg border border-red-400/30 bg-red-400/10 p-3 text-sm text-red-200">{error}</p>}

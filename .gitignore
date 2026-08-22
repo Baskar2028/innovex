@@ -23,3 +23,14 @@ server/data.json
 *.njsproj
 *.sln
 *.sw?
+
+
+# Environment variables (contains secret password)
+.env
+.env.local
+
+# Dependency directories
+node_modules/
+
+# Production build folder
+dist/
