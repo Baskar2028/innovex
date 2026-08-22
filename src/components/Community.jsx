@@ -1,6 +1,6 @@
 import Reveal from './Reveal';
 import innovexLogo from '../assets/innovex-logo.png';
-import hodImage from '../assets/hod.jpeg';
+import hodImage from '../assets/HOD.jpeg';
 import staffImage from '../assets/staff.jpeg';
 import presidentImage from '../assets/president.jpeg';
 import vicePresidentImage from '../assets/founder.jpeg';
