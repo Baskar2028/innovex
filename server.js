@@ -122,7 +122,7 @@ app.get('/api/export-excel', async (req, res) => {
 if (isProduction) {
   app.use(express.static(path.join(rootDir, 'dist')));
   // Route all client-side navigation back to index.html in production
-  app.get('*', (req, res) => {
+  app.get('/*', (req, res) => {
     res.sendFile(path.join(rootDir, 'dist', 'index.html'));
   });
 } else {
