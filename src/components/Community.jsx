@@ -40,7 +40,7 @@ export default function Community() {
               <Card 
                 image={hodImage} 
                 imageClassName="object-[center_25%]"
-                name="Mr.C. Prakash Narayanan.,M.E.,HOD" 
+                name="Mr.C. PRAKASH NARAYANAN.,M.E.,HOD" 
                 role="Head of Department" 
                 desc="Provides academic guidance and oversees the symposium’s overall direction." 
                 alignmentClassName="mx-0"
@@ -53,7 +53,7 @@ export default function Community() {
               <Card 
                 image={staffImage}
                 imageClassName="object-[center_25%]"
-                name="Mrs. K.Nandini"
+                name="Mrs. K.NANDHINI"
                 role="Staff Coordinator" 
                 desc="Coordinates the event team, schedules, and smooth on-ground execution." 
                 alignmentClassName="mx-0"
@@ -65,13 +65,13 @@ export default function Community() {
               <Card 
                 image={presidentImage} 
                 imageClassName="object-[center_18%]"
-                name="Arasu" 
+                name="ARASU V" 
                 role="Student President" 
                 desc="Leads the student team and helps shape the participant experience." 
               />
               <Card 
                 image={vicePresidentImage} 
-                name="Baskar K" 
+                name="BASKAR K" 
                 role="Student Vice President" 
                 desc="Supports team coordination and ensures every event runs as planned." 
               />
