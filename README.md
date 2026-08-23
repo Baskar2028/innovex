@@ -8,7 +8,7 @@ The platform is designed to provide participants with event information, symposi
 
 ## 🌐 Live Website
 
-**https://innovex.onrender.com**
+**https://innovex-2k26.onrender.com**
 
 ## ✨ Features
 
