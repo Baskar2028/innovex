@@ -25,7 +25,7 @@ export default function Contact() {
                 <a href="#" aria-label="Email" className="w-12 h-12 flex items-center justify-center border border-white/10 rounded-full text-white bg-white/5 transition-all hover:bg-primary hover:border-primary hover:-translate-y-1">
                   <i className="fas fa-envelope text-xl"></i>
                 </a>
-                <a href="#" aria-label="WhatsApp" className="w-12 h-12 flex items-center justify-center border border-white/10 rounded-full text-white bg-white/5 transition-all hover:bg-primary hover:border-primary hover:-translate-y-1">
+                <a href="https://wa.me/917845469973" aria-label="WhatsApp" className="w-12 h-12 flex items-center justify-center border border-white/10 rounded-full text-white bg-white/5 transition-all hover:bg-primary hover:border-primary hover:-translate-y-1">
                   <i className="fab fa-whatsapp text-xl"></i>
                 </a>
                 <a href="#" aria-label="Instagram" className="w-12 h-12 flex items-center justify-center border border-white/10 rounded-full text-white bg-white/5 transition-all hover:bg-primary hover:border-primary hover:-translate-y-1">

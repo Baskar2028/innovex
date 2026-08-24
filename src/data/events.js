@@ -10,7 +10,7 @@ export const eventsData = [
     category: "Technical",
     title: "01 — PREZI",
     image: pptImage,
-    time: "12:00 PM – 2:00 PM",
+    time: "12:00 PM – 1:00 PM",
     desc: "A technical presentation competition based on recent technological trends.",
     rules: [
       "Maximum of 4 members per team.",
@@ -27,7 +27,7 @@ export const eventsData = [
     category: "Technical ",
     title: "02 — PROTOSPARK",
     image: projectExpoImage,
-    time: "12:00 PM – 2:00 PM",
+    time: "1:00 PM – 2:00 PM",
     desc: "Showcase innovative projects designed to address real-world problems.",
     rules: [
       "Maximum of 4 members per team.",
@@ -49,7 +49,6 @@ export const eventsData = [
     "Individual participation only.",
     "The event consists of 2 rounds. Top performers from Round 1 will be shortlisted for Round 2.",
     "Buggy code snippets will be provided in 3 languages: C, Python, and Java. Participants can choose their preferred language.",
-    "Participants must bring their own laptops with the necessary IDEs or text editors installed.",
     "Judging criteria: Winners are determined based on the accuracy of the bug fixes and the fastest time of completion.",
     "The top 2 participants from the final round will be declared the winners.",
     "Use of the internet, AI tools (like ChatGPT), or flash drives is strictly prohibited during the competition."

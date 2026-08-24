@@ -199,7 +199,7 @@ if (isProduction) {
 
 app.listen(process.env.PORT || 3001, () => {
   console.log(
-    `Innovex is running at http://localhost:${process.env.PORT || 3001} (${
+    `Innovex is running at http://localhost:3001 (${
       isProduction ? 'production' : 'development'
     })`
   );
