@@ -5,9 +5,11 @@ const degrees = ['BE', 'BTech'];
 const branches = ['CSE', 'IT', 'AIDS', 'AIML', 'DS', 'CSE(CS)', 'ECE', 'EEE', 'CIVIL', 'MECH'];
 const years = ['I', 'II', 'III', 'IV'];
 const events = ['PREZI', 'PROTOSPARK', 'TRY CRACK ME','QUIZMANIA', 'ARTNOVA'];
+const emptyMember = () => ({ name: '', email: '', department: '', contact: '', college: '' });
+const inputClass = 'mt-2 w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-primary';
 
 export default function RegisterModal({ onClose }) {
-  const [form, setForm] = useState({ name: '', degree: '', degreeDetail: '', branch: '', year: '', teamMembers: '', events: [], payment: '' });
+  const [form, setForm] = useState({ name: '', email: '', contact: '', college: '', degree: '', degreeDetail: '', branch: '', year: '', teamMembers: '', members: [], events: [], payment: '' });
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -25,6 +27,25 @@ export default function RegisterModal({ onClose }) {
   const updateField = (event) => {
     const { name, value } = event.target;
     setForm((current) => ({ ...current, [name]: value }));
+    setError('');
+  };
+
+  const updateTeamSize = (event) => {
+    const teamMembers = Number(event.target.value);
+    setForm((current) => ({
+      ...current,
+      teamMembers,
+      members: Array.from({ length: teamMembers }, (_, index) => current.members[index] || emptyMember()),
+    }));
+    setError('');
+  };
+
+  const updateMember = (index, event) => {
+    const { name, value } = event.target;
+    setForm((current) => ({
+      ...current,
+      members: current.members.map((member, memberIndex) => memberIndex === index ? { ...member, [name]: value } : member),
+    }));
     setError('');
   };
 
@@ -94,18 +115,30 @@ export default function RegisterModal({ onClose }) {
 
         <form onSubmit={submitRegistration} className="space-y-5 p-6">
           <label className="block text-sm font-medium text-slate-200">Name
-            <input required name="name" value={form.name} onChange={updateField} className="mt-2 w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-primary" />
+            <input required name="name" value={form.name} onChange={updateField} className={inputClass} />
           </label>
+
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+            <label className="block text-sm font-medium text-slate-200">Email ID
+              <input required type="email" name="email" value={form.email} onChange={updateField} className={inputClass} />
+            </label>
+            <label className="block text-sm font-medium text-slate-200">Contact Number
+              <input required type="tel" name="contact" value={form.contact} onChange={updateField} className={inputClass} />
+            </label>
+            <label className="block text-sm font-medium text-slate-200">College Name
+              <input required name="college" value={form.college} onChange={updateField} className={inputClass} />
+            </label>
+          </div>
 
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
             <label className="block text-sm font-medium text-slate-200">Degree
-              <select required name="degree" value={form.degree} onChange={updateField} className="mt-2 w-full rounded-lg border border-white/10 bg-surface px-4 py-3 text-white outline-none focus:border-primary">
+              <select required name="degree" value={form.degree} onChange={updateField} className={inputClass}>
                 <option value="">Select degree</option>
                 {degrees.map((degree) => <option key={degree} value={degree}>{degree}</option>)}
               </select>
             </label>
             <label className="block text-sm font-medium text-slate-200">Branch
-              <select required name="branch" value={form.branch} onChange={updateField} className="mt-2 w-full rounded-lg border border-white/10 bg-surface px-4 py-3 text-white outline-none focus:border-primary">
+              <select required name="branch" value={form.branch} onChange={updateField} className={inputClass}>
                 <option value="">Select branch</option>
                 {branches.map((branch) => <option key={branch} value={branch}>{branch}</option>)}
               </select>
@@ -113,19 +146,34 @@ export default function RegisterModal({ onClose }) {
           </div>
 
           {needsDegreeDetail && <label className="block text-sm font-medium text-slate-200">{form.degree === 'Others' ? 'Enter your degree' : 'Enter your Arts & Science degree'}
-            <input required name="degreeDetail" value={form.degreeDetail} onChange={updateField} className="mt-2 w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-primary" />
+            <input required name="degreeDetail" value={form.degreeDetail} onChange={updateField} className={inputClass} />
           </label>}
 
           <label className="block text-sm font-medium text-slate-200">Year
-            <select required name="year" value={form.year} onChange={updateField} className="mt-2 w-full rounded-lg border border-white/10 bg-surface px-4 py-3 text-white outline-none focus:border-primary">
+            <select required name="year" value={form.year} onChange={updateField} className={inputClass}>
               <option value="">Select year</option>
               {years.map((year) => <option key={year} value={year}>{year}</option>)}
             </select>
           </label>
 
-          <label className="block text-sm font-medium text-slate-200">Total Team Members
-            <input required min="1" type="number" name="teamMembers" value={form.teamMembers} onChange={updateField} className="mt-2 w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-primary" />
-          </label>
+          <fieldset>
+            <legend className="text-sm font-medium text-slate-200">Number of Team Members</legend>
+            <div className="mt-3 grid grid-cols-4 gap-3">
+              {[1, 2, 3, 4].map((count) => <label key={count} className={`flex cursor-pointer items-center justify-center rounded-lg border p-3 text-sm font-bold transition-colors ${form.teamMembers === count ? 'border-primary bg-primary/20 text-white' : 'border-white/10 bg-white/5 text-muted'}`}>
+                <input required type="radio" name="teamMembers" value={count} checked={form.teamMembers === count} onChange={updateTeamSize} className="sr-only" />
+                {count}
+              </label>)}
+            </div>
+          </fieldset>
+
+          {form.members.map((member, index) => <fieldset key={index} className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+            <legend className="px-2 text-sm font-bold text-primary-2">Team Member {index + 1}</legend>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {['name', 'email', 'department', 'contact', 'college'].map((field) => <label key={field} className="block text-sm font-medium capitalize text-slate-200">{field === 'email' ? 'Email ID' : field === 'contact' ? 'Contact Number' : field === 'college' ? 'College Name' : field === 'department' ? 'Department' : 'Name'}
+                <input required type={field === 'email' ? 'email' : field === 'contact' ? 'tel' : 'text'} name={field} value={member[field]} onChange={(event) => updateMember(index, event)} className={inputClass} />
+              </label>)}
+            </div>
+          </fieldset>)}
 
           <fieldset>
             <legend className="text-sm font-medium text-slate-200">Events <span className="text-muted">(choose up to 2)</span></legend>

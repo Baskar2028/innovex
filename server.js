@@ -29,6 +29,8 @@ const allowedYears = ['I', 'II', 'III', 'IV'];
 const allowedEvents = ['PREZI', 'PROTOSPARK', 'TRY CRACK ME', 'QUIZMANIA', 'ARTNOVA'];
 
 const allowedPayments = ['Online', 'Offline'];
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const contactPattern = /^[+]?[0-9 ()-]{7,20}$/;
 
 let writeQueue = Promise.resolve();
 
@@ -46,11 +48,28 @@ function isValidRegistration(registration) {
   return (
     typeof registration.name === 'string' &&
     registration.name.trim().length > 0 &&
+    typeof registration.email === 'string' &&
+    emailPattern.test(registration.email) &&
+    typeof registration.contact === 'string' &&
+    contactPattern.test(registration.contact) &&
+    typeof registration.college === 'string' &&
+    registration.college.trim().length > 0 &&
     allowedDegrees.includes(registration.degree) &&
     allowedBranches.includes(registration.branch) &&
     allowedYears.includes(registration.year) &&
     Number.isInteger(registration.teamMembers) &&
     registration.teamMembers >= 1 &&
+    registration.teamMembers <= 4 &&
+    Array.isArray(registration.members) &&
+    registration.members.length === registration.teamMembers &&
+    registration.members.every((member) =>
+      member &&
+      typeof member.name === 'string' && member.name.trim().length > 0 &&
+      typeof member.email === 'string' && emailPattern.test(member.email) &&
+      typeof member.department === 'string' && member.department.trim().length > 0 &&
+      typeof member.contact === 'string' && contactPattern.test(member.contact) &&
+      typeof member.college === 'string' && member.college.trim().length > 0
+    ) &&
     Array.isArray(registration.events) &&
     registration.events.length >= 1 &&
     registration.events.length <= 2 &&
@@ -66,7 +85,8 @@ async function appendRegistration(registration) {
   let registrations = [];
 
   try {
-    registrations = JSON.parse(await readFile(dataFile, 'utf8'));
+    const fileContents = await readFile(dataFile, 'utf8');
+    registrations = fileContents.trim() ? JSON.parse(fileContents) : [];
   } catch (error) {
     if (error.code !== 'ENOENT') throw error;
   }
@@ -79,6 +99,9 @@ async function appendRegistration(registration) {
 app.post('/api/register', (req, res) => {
   const registration = {
     name: typeof req.body.name === 'string' ? req.body.name.trim() : '',
+    email: typeof req.body.email === 'string' ? req.body.email.trim() : '',
+    contact: typeof req.body.contact === 'string' ? req.body.contact.trim() : '',
+    college: typeof req.body.college === 'string' ? req.body.college.trim() : '',
     degree: req.body.degree,
     degreeDetail:
       typeof req.body.degreeDetail === 'string'
@@ -87,6 +110,15 @@ app.post('/api/register', (req, res) => {
     branch: req.body.branch,
     year: req.body.year,
     teamMembers: Number(req.body.teamMembers),
+    members: Array.isArray(req.body.members)
+      ? req.body.members.map((member) => ({
+          name: typeof member.name === 'string' ? member.name.trim() : '',
+          email: typeof member.email === 'string' ? member.email.trim() : '',
+          department: typeof member.department === 'string' ? member.department.trim() : '',
+          contact: typeof member.contact === 'string' ? member.contact.trim() : '',
+          college: typeof member.college === 'string' ? member.college.trim() : '',
+        }))
+      : [],
     events: req.body.events,
     payment: req.body.payment,
     registeredAt: new Date().toISOString(),
@@ -138,11 +170,17 @@ app.get('/api/export-excel', async (req, res) => {
 
     const formattedData = registrations.map((item) => ({
       Name: item.name,
+      Email: item.email,
+      Contact: item.contact,
+      College: item.college,
       Degree: item.degree,
       'Degree Detail': item.degreeDetail || 'N/A',
       Branch: item.branch,
       Year: item.year,
       'Team Members': item.teamMembers,
+      'Team Member Details': Array.isArray(item.members)
+        ? item.members.map((member, index) => `${index + 1}. ${member.name} | ${member.email} | ${member.department} | ${member.contact} | ${member.college}`).join('\n')
+        : '',
       Events: Array.isArray(item.events)
         ? item.events.join(', ')
         : item.events,
