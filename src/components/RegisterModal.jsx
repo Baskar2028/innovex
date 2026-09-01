@@ -4,12 +4,13 @@ import payImage from '../assets/pay.jpeg';
 const degrees = ['BE', 'BTech'];
 const branches = ['CSE', 'IT', 'AIDS', 'AIML', 'DS', 'CSE(CS)', 'ECE', 'EEE', 'CIVIL', 'MECH'];
 const years = ['I', 'II', 'III', 'IV'];
-const events = ['PREZI', 'PROTOSPARK', 'TRY CRACK ME','QUIZMANIA', 'ARTNOVA'];
+const events = ['PREZI', 'PROTOSPARK', 'TRY CRACK ME', 'QUIZMANIA', 'ARTNOVA'];
 const emptyMember = () => ({ name: '', email: '', department: '', contact: '', college: '' });
-const inputClass = 'mt-2 w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-primary';
+const inputClass = 'mt-2 w-full rounded-lg border border-white/10 bg-slate-900/90 px-4 py-3 text-white outline-none transition focus:border-violet-400';
+const selectClass = `${inputClass} appearance-none`;
 
 export default function RegisterModal({ onClose }) {
-  const [form, setForm] = useState({ name: '', email: '', contact: '', college: '', degree: '', degreeDetail: '', branch: '', year: '', teamMembers: '', members: [], events: [], payment: '' });
+  const [form, setForm] = useState({ name: '', email: '', contact: '', college: '', degree: '', degreeDetail: '', branch: '', year: '', members: [], events: [], payment: '' });
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -30,12 +31,20 @@ export default function RegisterModal({ onClose }) {
     setError('');
   };
 
-  const updateTeamSize = (event) => {
-    const teamMembers = Number(event.target.value);
+  const addMember = () => {
+    if (form.members.length < 4) {
+      setForm((current) => ({
+        ...current,
+        members: [...current.members, emptyMember()],
+      }));
+      setError('');
+    }
+  };
+
+  const removeMember = (index) => {
     setForm((current) => ({
       ...current,
-      teamMembers,
-      members: Array.from({ length: teamMembers }, (_, index) => current.members[index] || emptyMember()),
+      members: current.members.filter((_, i) => i !== index),
     }));
     setError('');
   };
@@ -66,13 +75,24 @@ export default function RegisterModal({ onClose }) {
   const submitRegistration = async (event) => {
     event.preventDefault();
     setError('');
+
+    // Client-side validation
+    if (form.events.length === 0) {
+      setError('Please select at least one event.');
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
+      const submissionData = {
+        ...form,
+        teamMembers: form.members.length,
+      };
       const response = await fetch('/api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify(submissionData),
       });
       const responseText = await response.text();
       let result = {};
@@ -132,13 +152,13 @@ export default function RegisterModal({ onClose }) {
 
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
             <label className="block text-sm font-medium text-slate-200">Degree
-              <select required name="degree" value={form.degree} onChange={updateField} className={inputClass}>
+              <select required name="degree" value={form.degree} onChange={updateField} className={selectClass}>
                 <option value="">Select degree</option>
                 {degrees.map((degree) => <option key={degree} value={degree}>{degree}</option>)}
               </select>
             </label>
             <label className="block text-sm font-medium text-slate-200">Branch
-              <select required name="branch" value={form.branch} onChange={updateField} className={inputClass}>
+              <select required name="branch" value={form.branch} onChange={updateField} className={selectClass}>
                 <option value="">Select branch</option>
                 {branches.map((branch) => <option key={branch} value={branch}>{branch}</option>)}
               </select>
@@ -150,33 +170,60 @@ export default function RegisterModal({ onClose }) {
           </label>}
 
           <label className="block text-sm font-medium text-slate-200">Year
-            <select required name="year" value={form.year} onChange={updateField} className={inputClass}>
+            <select required name="year" value={form.year} onChange={updateField} className={selectClass}>
               <option value="">Select year</option>
               {years.map((year) => <option key={year} value={year}>{year}</option>)}
             </select>
           </label>
 
           <fieldset>
-            <legend className="text-sm font-medium text-slate-200">Number of Team Members</legend>
-            <div className="mt-3 grid grid-cols-4 gap-3">
-              {[1, 2, 3, 4].map((count) => <label key={count} className={`flex cursor-pointer items-center justify-center rounded-lg border p-3 text-sm font-bold transition-colors ${form.teamMembers === count ? 'border-primary bg-primary/20 text-white' : 'border-white/10 bg-white/5 text-muted'}`}>
-                <input required type="radio" name="teamMembers" value={count} checked={form.teamMembers === count} onChange={updateTeamSize} className="sr-only" />
-                {count}
-              </label>)}
-            </div>
+            <legend className="text-sm font-medium text-slate-200">Team Members <span className="text-muted">(optional)</span></legend>
+            <p className="mt-2 text-xs text-slate-400">You can register without team members. Click "Add Member" to include team members.</p>
+            
+            {form.members.length === 0 ? (
+              <div className="mt-4 rounded-lg border border-dashed border-white/20 bg-white/5 p-4 text-center">
+                <p className="text-sm text-slate-300">No team members added yet</p>
+              </div>
+            ) : (
+              <div className="mt-4 space-y-3">
+                {form.members.map((member, index) => (
+                  <fieldset key={index} className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+                    <legend className="flex items-center justify-between px-2 text-sm font-bold text-primary-2">
+                      <span>Team Member {index + 1}</span>
+                      <button
+                        type="button"
+                        onClick={() => removeMember(index)}
+                        className="text-xs font-bold text-red-400 transition hover:text-red-300"
+                      >
+                        Remove
+                      </button>
+                    </legend>
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                      {['name', 'email', 'department', 'contact', 'college'].map((field) => (
+                        <label key={field} className="block text-sm font-medium capitalize text-slate-200">
+                          {field === 'email' ? 'Email ID' : field === 'contact' ? 'Contact Number' : field === 'college' ? 'College Name' : field === 'department' ? 'Department' : 'Name'}
+                          <input required type={field === 'email' ? 'email' : field === 'contact' ? 'tel' : 'text'} name={field} value={member[field]} onChange={(event) => updateMember(index, event)} className={inputClass} />
+                        </label>
+                      ))}
+                    </div>
+                  </fieldset>
+                ))}
+              </div>
+            )}
+            
+            {form.members.length < 4 && (
+              <button
+                type="button"
+                onClick={addMember}
+                className="mt-4 rounded-lg border border-dashed border-violet-400/50 bg-violet-400/10 px-4 py-2 text-sm font-semibold text-violet-300 transition hover:border-violet-400/80 hover:bg-violet-400/20"
+              >
+                + Add Member
+              </button>
+            )}
           </fieldset>
 
-          {form.members.map((member, index) => <fieldset key={index} className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
-            <legend className="px-2 text-sm font-bold text-primary-2">Team Member {index + 1}</legend>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              {['name', 'email', 'department', 'contact', 'college'].map((field) => <label key={field} className="block text-sm font-medium capitalize text-slate-200">{field === 'email' ? 'Email ID' : field === 'contact' ? 'Contact Number' : field === 'college' ? 'College Name' : field === 'department' ? 'Department' : 'Name'}
-                <input required type={field === 'email' ? 'email' : field === 'contact' ? 'tel' : 'text'} name={field} value={member[field]} onChange={(event) => updateMember(index, event)} className={inputClass} />
-              </label>)}
-            </div>
-          </fieldset>)}
-
           <fieldset>
-            <legend className="text-sm font-medium text-slate-200">Events <span className="text-muted">(choose up to 2)</span></legend>
+            <legend className="text-sm font-medium text-slate-200">Events <span className="text-red-400">*</span> <span className="text-muted">(choose 1 or 2)</span></legend>
             <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
               {events.map((eventName) => <label key={eventName} className="flex cursor-pointer items-center gap-3 rounded-lg border border-white/10 bg-white/5 p-3 text-sm text-slate-200">
                 <input type="checkbox" checked={form.events.includes(eventName)} onChange={() => toggleEvent(eventName)} className="accent-violet-500" />
