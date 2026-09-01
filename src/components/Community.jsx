@@ -53,7 +53,7 @@ export default function Community() {
               <Card 
                 image={staffImage}
                 imageClassName="object-[center_25%]"
-                name="Mrs. K.NANDHINI"
+                name="Mrs. K.NANDINI"
                 role="Staff Coordinator" 
                 desc="Coordinates the event team, schedules, and smooth on-ground execution." 
                 alignmentClassName="mx-0"
