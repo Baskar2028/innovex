@@ -18,7 +18,8 @@ export default function Events({ onOpenModal }) {
               </div>
               <div className="flex flex-col flex-1 p-6">
                 <span className="text-primary-2 text-xs font-bold uppercase tracking-widest">{ev.category}</span>
-                <h3 className="font-space text-xl font-semibold mt-2 mb-3">{ev.title}</h3>
+                <h3 className="font-space text-xl font-semibold mt-2 mb-1">{ev.title}</h3>
+                <span className="text-sm font-medium text-slate-300 mb-3">{ev.subtitle}</span>
                 <div className="inline-flex self-start bg-white/5 border border-white/10 rounded-md px-3 py-1.5 text-xs text-slate-300 mb-4">
                   <i className="far fa-clock text-primary-2 mr-2"></i>{ev.time}
                 </div>

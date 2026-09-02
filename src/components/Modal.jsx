@@ -33,6 +33,7 @@ export default function Modal({ event, onClose }) {
         <div className="flex justify-between items-start p-6 border-b border-white/10">
           <div>
             <h3 className="text-2xl font-space font-bold text-white mb-1">{event.title}</h3>
+            <h5 className="text-base font-medium font-sans text-white mb-1">{event.subtitle}</h5>
             <span className="text-primary-2 text-sm font-medium">
               <i className="far fa-clock mr-2"></i>{event.time}
             </span>

@@ -22,7 +22,7 @@ export default function Contact() {
               </div>
 
               <div className="flex gap-4">
-                <a href="#" aria-label="Email" className="w-12 h-12 flex items-center justify-center border border-white/10 rounded-full text-white bg-white/5 transition-all hover:bg-primary hover:border-primary hover:-translate-y-1">
+                <a href="mailto:innovex2k26@gmail.com" aria-label="Email" className="w-12 h-12 flex items-center justify-center border border-white/10 rounded-full text-white bg-white/5 transition-all hover:bg-primary hover:border-primary hover:-translate-y-1">
                   <i className="fas fa-envelope text-xl"></i>
                 </a>
                 <a href="https://wa.me/917845469973" aria-label="WhatsApp" className="w-12 h-12 flex items-center justify-center border border-white/10 rounded-full text-white bg-white/5 transition-all hover:bg-primary hover:border-primary hover:-translate-y-1">
@@ -35,17 +35,15 @@ export default function Contact() {
             </div>
             
             {/* Map Side */}
-            <div className="min-h-[350px] lg:min-h-full grayscale-[0.8] contrast-[1.2] brightness-[0.6]">
-              <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d124503.77443152668!2d78.14088927429447!3d12.520475283403248!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bac4f5b5522501d%3A0xa6131c9a09bd96!2sKrishnagiri%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin" 
-                width="100%" 
-                height="100%" 
-                style={{ border: 0 }} 
-                allowFullScreen="" 
-                loading="lazy" 
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Google Map Location"
-              ></iframe>
+           <div className="relative w-full h-[350px] lg:h-full grayscale-[0.8] contrast-[1.2] brightness-[0.6] rounded-2xl overflow-hidden">
+            <iframe
+    src="https://maps.google.com/maps?q=PSV%20College%20of%20Engineering%20%26%20Technology&t=&z=15&ie=UTF8&iwloc=&output=embed"
+    className="w-full h-full border-0"
+    allowFullScreen=""
+    loading="lazy"
+    referrerPolicy="no-referrer-when-downgrade"
+    title="PSV College Location Map"
+               />
             </div>
             
           </div>

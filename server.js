@@ -1,13 +1,17 @@
 import 'dotenv/config';
 
 import express from 'express';
+
 import pg from 'pg';
+
 import path from 'node:path';
+
 import { fileURLToPath } from 'node:url';
 
 const { Pool } = pg;
 
 const app = express();
+
 const rootDir = path.dirname(fileURLToPath(import.meta.url));
 
 const ADMIN_PASSWORD =
@@ -20,43 +24,38 @@ const isProduction = process.env.NODE_ENV === 'production';
 /* =========================================================
    PostgreSQL Connection
    =========================================================
-
    RENDER:
    Set DATABASE_URL in Render Environment Variables.
 
    LOCAL:
-   If DATABASE_URL is not present, the app uses:
-   postgresql://postgres:postgres@localhost:5432/innovex
-
-   You can change the local values using:
-   PGUSER
-   PGPASSWORD
-   PGHOST
-   PGPORT
-   PGDATABASE
+   If DATABASE_URL is not present, the app starts without
+   requiring a local PostgreSQL installation.
    ========================================================= */
 
-const databaseUrl =
-  process.env.DATABASE_URL ||
-  `postgresql://${encodeURIComponent(process.env.PGUSER || 'postgres')}:${encodeURIComponent(
-    process.env.PGPASSWORD || 'postgres'
-  )}@${process.env.PGHOST || 'localhost'}:${process.env.PGPORT || '5432'}/${process.env.PGDATABASE || 'innovex'}`;
+const databaseUrl = process.env.DATABASE_URL;
 
-const pool = new Pool({
-  connectionString: databaseUrl,
+const pool = databaseUrl
+  ? new Pool({
+      connectionString: databaseUrl,
 
-  // Render PostgreSQL requires SSL.
-  // Local PostgreSQL normally does not.
-  ssl: isProduction
-    ? {
-        rejectUnauthorized: false,
-      }
-    : false,
-});
+      // Render PostgreSQL requires SSL.
+      // Local PostgreSQL normally does not.
+      ssl: isProduction
+        ? {
+            rejectUnauthorized: false,
+          }
+        : false,
+    })
+  : null;
 
-pool.on('error', (error) => {
-  console.error('Unexpected error on idle PostgreSQL client:', error);
-});
+if (pool) {
+  pool.on('error', (error) => {
+    console.error(
+      'Unexpected error on idle PostgreSQL client:',
+      error
+    );
+  });
+}
 
 app.use(express.json());
 
@@ -92,6 +91,7 @@ const allowedEvents = [
 const allowedPayments = ['Online', 'Offline'];
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 const contactPattern = /^[+]?[0-9 ()-]{7,20}$/;
 
 /* =========================================================
@@ -99,11 +99,19 @@ const contactPattern = /^[+]?[0-9 ()-]{7,20}$/;
    ========================================================= */
 
 async function sqlRun(query, params = []) {
+  if (!pool) {
+    throw new Error('Database is not configured locally.');
+  }
+
   const result = await pool.query(query, params);
   return result;
 }
 
 async function sqlAll(query, params = []) {
+  if (!pool) {
+    throw new Error('Database is not configured locally.');
+  }
+
   const result = await pool.query(query, params);
   return result.rows;
 }
@@ -113,6 +121,13 @@ async function sqlAll(query, params = []) {
    ========================================================= */
 
 async function initializeDatabase() {
+  if (!pool) {
+    console.log(
+      'No DATABASE_URL found. Starting local development without PostgreSQL.'
+    );
+    return;
+  }
+
   try {
     await sqlRun(`
       CREATE TABLE IF NOT EXISTS registrations (
@@ -135,17 +150,22 @@ async function initializeDatabase() {
 
     console.log('Database initialized successfully.');
   } catch (error) {
-    console.error('Database initialization failed:', error.message);
-
     console.error(
-      '\nMake sure PostgreSQL is running and the database exists.\n' +
-        'For local development:\n' +
-        '  Database: innovex\n' +
-        '  Host: localhost\n' +
-        '  Port: 5432\n'
+      'Database initialization failed:',
+      error.message
     );
 
-    process.exit(1);
+    if (isProduction) {
+      console.error(
+        '\nMake sure PostgreSQL is running and DATABASE_URL is configured in Render.'
+      );
+
+      process.exit(1);
+    } else {
+      console.warn(
+        '\nPostgreSQL is not available locally. Starting without database.'
+      );
+    }
   }
 }
 
@@ -158,7 +178,6 @@ function parseJson(value, fallback = []) {
 
   try {
     const parsed = JSON.parse(value);
-
     return Array.isArray(parsed) ? parsed : fallback;
   } catch {
     return fallback;
@@ -754,22 +773,14 @@ app.get(
 
       const rows = registrations.map((item) => ({
         Name: item.name,
-
         Email: item.email,
-
         Contact: item.contact,
-
         College: item.college,
-
         Degree: item.degree,
-
         'Degree Detail':
           item.degree_detail || 'N/A',
-
         Branch: item.branch,
-
         Year: item.year,
-
         'Team Members': item.team_members,
 
         'Team Member Details': parseJson(
@@ -788,7 +799,6 @@ app.get(
         ).join(', '),
 
         Payment: item.payment,
-
         'Registered At': item.registered_at,
       }));
 
@@ -870,7 +880,7 @@ if (isProduction) {
   );
 
   app.get(
-    '/{*splat}',
+    '/*splat',
     (req, res) => {
       res.sendFile(
         path.join(
@@ -915,3 +925,4 @@ app.listen(PORT, () => {
     })`
   );
 });
+
